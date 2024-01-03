@@ -1,9 +1,10 @@
 #ifndef USER_MAIN_H_INCLUDED
 #define USER_MAIN_H_INCLUDED
 //include-----------------------------------------
-#include "main.h"
 #include "tim.h"
-
+#include "user_header/servo.h"
+#include "user_header/user_adc.h"
+#include "user_header/encoder.h"
 //Macro definition--------------------------------
 
 //Type definition---------------------------------

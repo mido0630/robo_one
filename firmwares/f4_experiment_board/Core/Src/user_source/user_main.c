@@ -1,13 +1,14 @@
 #include "user_header/user_main.h"
 
 void user_initialize(){
-	//DRV8256のPWMピン
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	//DRV8256のENABLEピン
-	HAL_GPIO_WritePin(DCM_ENBALE_GPIO_Port,DCM_ENBALE_Pin,GPIO_PIN_SET);
-	//PWM start
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	drv8256_init();
+	user_adc_init();
+	encoder_init();
+//	control_init();
+	HAL_TIM_Base_Start_IT(&htim13);
+	HAL_TIM_Base_Start_IT(&htim2);
 }
+
 void user_loop(){
 	int count = 0, max_step = 10000-1, nagative_flag = 0;
 	while(1){
@@ -21,26 +22,30 @@ void user_loop(){
 		}
 		if(nagative_flag) count--;
 		else count+=4;
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2250/2);
+//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2250/2);
+//		if(HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_Value, 6)!=HAL_OK)Error_Handler();
 	    HAL_Delay(1);
 	}
 }
 
-void timer_interrupt_1kHz(){
+void timer_interrupt_1(){
 	;
 }
 
-void timer_interrupt_20kHz(){
-	;
+void timer_interrupt_2(){
+//	HAL_GPIO_TogglePin (LED1_GPIO_Port, LED1_Pin);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if( htim->Instance == TIM13 ){
-		//1kHz
-		timer_interrupt_1kHz();
+		//2kHz
+		timer_interrupt_1();
 	}
-	if( htim->Instance == TIM14 ){
-		//4kHz
-		timer_interrupt_20kHz();
+	if( htim->Instance == TIM2 ){
+		//20kHz
+		timer_interrupt_2();
 	}
+}
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle){
+	HAL_GPIO_TogglePin (LED1_GPIO_Port, LED1_Pin);
 }
