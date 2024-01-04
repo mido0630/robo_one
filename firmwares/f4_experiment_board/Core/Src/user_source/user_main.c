@@ -10,21 +10,13 @@ void user_initialize(){
 }
 
 void user_loop(){
-	int count = 0, max_step = 10000-1, nagative_flag = 0;
+	int16_t time=500;
+	float duty_in_main=1;
 	while(1){
-		if(count > max_step){
-		 nagative_flag = 1;
-		 count = max_step;
-		}
-		else if(count < 0){
-		  nagative_flag = 0;
-		  count = 0;
-		}
-		if(nagative_flag) count--;
-		else count+=4;
-//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2250/2);
-//		if(HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_Value, 6)!=HAL_OK)Error_Handler();
-	    HAL_Delay(1);
+	drv8256_set_output(duty_in_main);
+	HAL_Delay(time);
+	drv8256_set_output(-1.0*duty_in_main);
+	HAL_Delay(time);
 	}
 }
 
@@ -48,4 +40,4 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle){
 	HAL_GPIO_TogglePin (LED1_GPIO_Port, LED1_Pin);
-}
+	}
