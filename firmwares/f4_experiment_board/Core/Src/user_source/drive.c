@@ -1,7 +1,8 @@
 #include "user_header/drive.h"
 
-uint16_t PWM_COUNTER_PERIOD=0;
-float DEBUG_PWM;
+uint16_t PWM_COUNTER_PERIOD;
+uint32_t DEBUG_PWM=0;
+float DEBUG_PWM_FLOAT=0.0;
 void drv8256_init(){
 	//DRV8256用PWM出力を初期値0で開始
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
@@ -14,15 +15,14 @@ void drv8256_init(){
 
 void drv8256_set_output(float duty){
 	//入力はduty(-1.0f~1.0f)
-	DEBUG_PWM=(uint32_t)(duty*(float)PWM_COUNTER_PERIOD);
+	DEBUG_PWM_FLOAT=duty;
+//	DEBUG_PWM=(int32_t)(duty*(float)PWM_COUNTER_PERIOD);
 	if(duty>0.0) HAL_GPIO_WritePin(DCM_ENBALE_GPIO_Port,DCM_ENBALE_Pin,GPIO_PIN_SET);
 	else{
 		HAL_GPIO_WritePin(DCM_ENBALE_GPIO_Port,DCM_ENBALE_Pin,GPIO_PIN_RESET);
 		duty=-1.0f*duty;
 	}
 	if(duty>1.0)duty=1.0;
-//	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (uint16_t)(duty*PWM_COUNTER_PERIOD));
-//	DEBUG_PWM=duty*(float)PWM_COUNTER_PERIOD;
+	DEBUG_PWM=(int32_t)(duty*(float)PWM_COUNTER_PERIOD);
 	TIM1->CCR1=(uint32_t)(duty*(float)PWM_COUNTER_PERIOD);
-//	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2000);
 }

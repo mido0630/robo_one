@@ -14,5 +14,6 @@ struct encoder{
 //Prototype declaration---------------------------
 void encoder_init(void);
 void encoder_set_count(int32_t count);
-void encoder_read_count(int32_t count);
+int32_t encoder_read_count(void);
+void encoder_update(void);
 #endif/*ENCODER_H_INCLUDED*/

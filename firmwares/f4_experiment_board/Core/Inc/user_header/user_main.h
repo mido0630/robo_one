@@ -6,6 +6,7 @@
 #include "user_header/user_adc.h"
 #include "user_header/encoder.h"
 #include "user_header/drive.h"
+#include "user_header/servo.h"
 //Macro definition--------------------------------
 
 //Type definition---------------------------------
